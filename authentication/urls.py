@@ -1,13 +1,12 @@
 # authentication/urls.py
 
 from django.urls import path
-from .views import SignupView, LoginView, LogoutView
+from .views import SignupView, LoginView, LogoutView, UserProfileView
 from .views import (
     UserListView, SendInterestView, ReceivedInterestsView, 
     AcceptRejectInterestView, ChatMessageListView, AcceptedInterestListView
 )
 from rest_framework_simplejwt.views import TokenRefreshView
-
 
 urlpatterns = [
     path('signup/', SignupView.as_view(), name='signup'),
@@ -20,4 +19,5 @@ urlpatterns = [
     path('chat/<str:username>/', ChatMessageListView.as_view(), name='chat-messages'),
     path('interests/accepted/', AcceptedInterestListView.as_view(), name='accepted_interests'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-]
+    path('profile/', UserProfileView.as_view(), name='user-profile'),
+] 

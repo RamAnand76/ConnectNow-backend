@@ -8,10 +8,11 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 from .serializers import UserSerializer, LoginSerializer, InterestSerializer, MessageSerializer
 from django.contrib.auth.models import update_last_login
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Interest, Message
+from .models import Interest, Message, User
 import logging
-from rest_framework import serializers
 from .serializers import UserSerializer
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 
 
@@ -155,3 +156,18 @@ class ChatMessageListView(generics.ListCreateAPIView):
         receiver_username = self.kwargs['username']
         receiver = User.objects.get(username=receiver_username)
         serializer.save(sender=self.request.user, receiver=receiver)
+
+
+class UserProfileView(generics.RetrieveUpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
+    def put(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
