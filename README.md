@@ -76,7 +76,7 @@ python manage.py createsuperuser
 
 ```bash
 git clone https://github.com/RamAnand76/ConnectNow-frontend.git
-cd Connect-frontend
+cd ConnectNow-frontend
 ```
 
 ### 6. Install the npm packages:
